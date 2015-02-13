@@ -1,6 +1,5 @@
 //////////////////////////////////
 /* //Mario//			||
-Created by Alex Todaro		||
 A simple mario game		||
 	Methods & Objects	||
 	-struct velocity	||
