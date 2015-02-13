@@ -1,4 +1,5 @@
 #include "../../Definitions/mdefines.h"
+#include "../../Structs/mstructs.h"
 
 void updatePosition(struct velocity *modifier, SDL_Rect *position, SDL_Rect *dummy, int gGrid[GRIDY][GRIDX], int inAir);
 void doGravity(struct velocity *toGravity);

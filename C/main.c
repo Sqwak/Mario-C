@@ -34,10 +34,10 @@ Version: Dev 0.8		||
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include "Functions/mfunctions.h"
-#include "Functions/Prototypes/mprototypes.h"
-#include "Definitions/mdefines.h"
-#include "Definitions/mpath.h"
-#include "Structs/mstructs.h"
+//#include "Functions/Prototypes/mprototypes.h"
+//#include "Definitions/mdefines.h"
+//#include "Definitions/mpath.h"
+//#include "Structs/mstructs.h"
 
 
 
@@ -127,28 +127,28 @@ int main(int argc, char **argv){
 
 	
 	//facing right
-	image = IMG_Load("./Images/Mario_dir1.png");
+	image = IMG_Load("PATH/Assets/Images/Mario_dir1.png");
 
 	mario_r = SDL_CreateTextureFromSurface(renderer, image);
 
 	SDL_FreeSurface(image);
 
 	//facing left
-	image = IMG_Load("./Images/Mario_dir-1.png");
+	image = IMG_Load("PATH/Assets/Images/Mario_dir-1.png");
 
 	mario_l = SDL_CreateTextureFromSurface(renderer, image);
 	
 	SDL_FreeSurface(image);
 
 	//jumping right
-	image = IMG_Load("./Images/mario_1_j.png");
+	image = IMG_Load("PATH/Assets/Images/mario_1_j.png");
 
 	mario_rj = SDL_CreateTextureFromSurface(renderer, image);
 
 	SDL_FreeSurface(image);
 
 	//jumping left
-	image = IMG_Load("./Images/mario_-1_j.png");
+	image = IMG_Load("PATH/Assets/Images/mario_-1_j.png");
 
 	mario_lj = SDL_CreateTextureFromSurface(renderer, image);
 
@@ -167,7 +167,7 @@ int main(int argc, char **argv){
 	////////////////////////////////////////////////////////////////////////
 	//FILE
 
-	if((fh = fopen("./levels/level1.grid", "r")) == NULL){
+	if((fh = fopen("ADDPATH(/Assets/Levels/level1.grid)", "r")) == NULL){
 
 		printf("Error opening file\n");
 		exit(2);

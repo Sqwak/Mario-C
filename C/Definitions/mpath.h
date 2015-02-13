@@ -1,1 +1,1 @@
-#define PATH "/home/student/alex/GitHub/Mario-C"
+#define ADDPATH(final) /home/student/alex/GitHub/Mario-C ## final

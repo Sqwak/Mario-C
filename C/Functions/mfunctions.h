@@ -215,7 +215,7 @@ void loadBlocks(SDL_Texture *blockpng[], SDL_Renderer *renderer){
 
 	for(i=0;i<20;i++){
 
-		sprintf(fname, "./Images/block%d.png", i);
+		sprintf(fname, "PATH/Assets/Images/block%d.png", i);
 
 		if(access(fname, F_OK) != -1){
 
@@ -223,7 +223,7 @@ void loadBlocks(SDL_Texture *blockpng[], SDL_Renderer *renderer){
 		
 		} else {
 
-			image = IMG_Load("./Images/missingno.png");
+			image = IMG_Load("PATH/Assets/Images/missingno.png");
 
 		}
 
