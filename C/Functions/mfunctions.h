@@ -8,8 +8,7 @@
 #include "Prototypes/mprototypes.h"
 
 
-
-
+#ifndef FUNCTIONS
 void updatePosition(struct velocity *modifier, SDL_Rect *position, SDL_Rect *dummy, int gGrid[GRIDY][GRIDX], int inAir){ //update mario y
 	
 	SDL_Rect test;
@@ -215,7 +214,7 @@ void loadBlocks(SDL_Texture *blockpng[], SDL_Renderer *renderer){
 
 	for(i=0;i<20;i++){
 
-		sprintf(fname, "PATH/Assets/Images/block%d.png", i);
+		sprintf(fname, PATH"/Assets/Images/block%d.png", i);
 
 		if(access(fname, F_OK) != -1){
 
@@ -223,7 +222,7 @@ void loadBlocks(SDL_Texture *blockpng[], SDL_Renderer *renderer){
 		
 		} else {
 
-			image = IMG_Load("PATH/Assets/Images/missingno.png");
+			image = IMG_Load(PATH"/Assets/Images/missingno.png");
 
 		}
 
@@ -282,5 +281,8 @@ SDL_Joystick *loadJoysticks(SDL_Joystick *joystick){
 	return joystick;
 
 }
+
+#define FUNCTIONS
+#endif
 
 

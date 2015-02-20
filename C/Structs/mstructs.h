@@ -1,3 +1,4 @@
+#ifndef STRUCTS
 struct velocity {	//struct definition
 
 	double xa;
@@ -14,7 +15,7 @@ struct goomba {
 	SDL_Rect rect;
 
 };
-
-
+#define STRUCTS
+#endif
 
  
