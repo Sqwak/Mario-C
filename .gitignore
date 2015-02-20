@@ -1,0 +1,10 @@
+#Compiled files
+*.o
+*.e
+
+#Linux Backups
+*.*~
+*~
+
+#Core files
+core.*
