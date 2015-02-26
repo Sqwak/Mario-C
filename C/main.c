@@ -4,14 +4,14 @@ A simple mario game		||
 	Methods & Objects	||
 	-struct velocity	||
 	-updatePosition		||
-	-doGravity		||
+	-doGravity			||
 	-doDirection		||
-	-onGround		||
-	-snapToGrid		||
+	-onGround			||
+	-snapToGrid			||
 	-doScrolling		||
-				||
+						||
 Version: Dev 0.8		||
-//End//*///			||
+//End//*///				||
 //////////////////////////////////			
 
 
@@ -55,6 +55,7 @@ int main(int argc, char **argv){
 	int mDirection = 0;	//left/right
 	int lDirection = 1;	//looking l/r
 	double prevVel;		//placeholder vel
+	int usingjoystick = 0;	//if using joystick
 
 	char throwaway;
 	char fname[100];
@@ -86,7 +87,9 @@ int main(int argc, char **argv){
 
 	struct velocity mario_velocity;		//velocity struct
 
-	struct goomba goombas[100];		//
+	struct goomba 	goombas[100];		//
+
+	const Uint8	*keystates;		//
 
 	FILE *fh;
 
@@ -107,7 +110,7 @@ int main(int argc, char **argv){
 
 		if(strcmp(argv[0], "editor")){
 
-			execv("./levels/marioleveleditor", NULL);
+			execv(PATH"/Assets/Levels/marioleveleditor", NULL);
 			exit(100);
 
 		}
@@ -181,26 +184,12 @@ int main(int argc, char **argv){
 
 	joystick = loadJoysticks(joystick);
 
-	/*if(SDL_NumJoysticks() == 0){
-		printf("Found no joysticks\n");
-		exit(1);
-		
-	} else {
+	if(joystick != NULL){
 
-		printf("%i joysticks were found\n", SDL_NumJoysticks());
+	usingjoystick = 1;	
+	SDL_JoystickEventState(SDL_ENABLE);
 
 	}
-
-	printf("The names of the joysticks are: \n");
-	for(i = 0; i < SDL_NumJoysticks(); i++){
-
-		joystick = SDL_JoystickOpen(i);
-
-		printf(">> %s, %d\n", SDL_JoystickName(joystick), i);
-
-	}*/
-
-	SDL_JoystickEventState(SDL_ENABLE);
 	
 	//////////////////////////////////////////////////////////////////
 	//placement
@@ -253,26 +242,30 @@ int main(int argc, char **argv){
 				break;
 
 			/*case SDL_KEYDOWN: //if keydown
-				switch(sdl_event.key.keysym.sym){
+				if(!usingjoystick){
 
-					case SDLK_SPACE: //if space
-						if(!inAir){ //check if in air
-							mario_velocity.ya += 20; //jump velocity
-							inAir = 1;
-						}
-						break;
+					switch(sdl_event.key.keysym.sym){
+
+						case SDLK_SPACE: //if space
+							if(!inAir){ //check if in air
+								mario_velocity.ya += 22; //jump velocity
+								inAir = 1;
+							}
+							break;
 						
-					case SDLK_RIGHT: //if right
-						isMoving = 1; //keydown flag
-						lDirection = 1;//head direction flag
-						mario_velocity.xa = ((mario_velocity.xa + SIDEINC/((12*(inAir+1)))) > SIDEINC) ? SIDEINC : (mario_velocity.xa + SIDEINC/(12*(inAir+1))); //velocity set (/2 if in air)
-						break;
+						case SDLK_RIGHT: //if right
+							isMoving = 1; //keydown flag
+							lDirection = 1;//head direction flag
+							mario_velocity.xa = ((mario_velocity.xa + SIDEINC/((12*(inAir+1)))) > SIDEINC) ? SIDEINC : (mario_velocity.xa + SIDEINC/(12*(inAir+1))); //velocity set (/2 if in air)
+							break;
 
-					case SDLK_LEFT: //if left
-						isMoving = 1; 
-						lDirection = 0;
-						mario_velocity.xa = ((mario_velocity.xa - SIDEINC/(12*(inAir+1))) < -SIDEINC) ?         -SIDEINC : (mario_velocity.xa - SIDEINC/(12*(inAir+1)));
-						break;
+						case SDLK_LEFT: //if left
+							isMoving = 1; 
+							lDirection = 0;
+							mario_velocity.xa = ((mario_velocity.xa - SIDEINC/(12*(inAir+1))) < -SIDEINC) ? -SIDEINC : (mario_velocity.xa - SIDEINC/(12*(inAir+1)));
+							break;
+
+					}
 
 				}
 				
@@ -286,31 +279,62 @@ int main(int argc, char **argv){
 
 		//joysticks
 
-		SDL_JoystickUpdate();
+		if(usingjoystick){
 
-		if(SDL_JoystickGetButton(joystick, 0) == SDL_PRESSED && !inAir){
-			inAir = 1;
-			mario_velocity.ya += 22;
-		}
+			SDL_JoystickUpdate();
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////
-		//CALCULATIONS
-
-		joy_x = (SDL_JoystickGetAxis(joystick, 0) / 5333);
-		isMoving = ((joy_x == 0) ? 0 : 1);
-
-		prevVel = mario_velocity.xa;
-
-		if(!(joy_x < 2 && joy_x > -2)){
-			
-			mario_velocity.xa = (abs((mario_velocity.xa + joy_x/((12.0*(inAir*3+1))))) > abs(SIDEINC)) ? (SIDEINC*(joy_x/(abs(joy_x)))) : (mario_velocity.xa + joy_x/(12.0*(inAir*3+1))); //velocity set (/2 if in air)
-		} else {
-			if(!inAir && isMoving){
-				mario_velocity.xa = joy_x;
+			if(SDL_JoystickGetButton(joystick, 0) == SDL_PRESSED && !inAir){
+				inAir = 1;
+				mario_velocity.ya += 22;
 			}
+
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			//CALCULATIONS
+
+			joy_x = (SDL_JoystickGetAxis(joystick, 0) / 5333);
+			isMoving = ((joy_x == 0) ? 0 : 1);
+
+			prevVel = mario_velocity.xa;
+
+			if(!(joy_x < 2 && joy_x > -2)){
+			
+				mario_velocity.xa = (abs((mario_velocity.xa + joy_x/((12.0*(inAir*3+1))))) > abs(SIDEINC)) ? (SIDEINC*(joy_x/(abs(joy_x)))) : (mario_velocity.xa + joy_x/(12.0*(inAir*3+1))); //velocity set (/2 if in air)
+			} else {
+				if(!inAir && isMoving){
+					mario_velocity.xa = joy_x;
+				}
+			}
+		
 		}
-		
-		
+
+		if(!usingjoystick){
+
+			keystates = SDL_GetKeyboardState(NULL);
+
+			if(keystates[SDL_SCANCODE_D]){
+
+				isMoving = 1; //keydown flag
+					lDirection = 1;//head direction flag
+					mario_velocity.xa = ((mario_velocity.xa + SIDEINC/((12*(inAir+1)))) > SIDEINC) ? SIDEINC : (mario_velocity.xa + SIDEINC/(12*(inAir+1))); //velocity set (/2 if in air)
+							
+			} else if(keystates[SDL_SCANCODE_A]){
+
+				isMoving = 1; 
+				lDirection = 0;
+				mario_velocity.xa = ((mario_velocity.xa - SIDEINC/(12*(inAir+1))) < -SIDEINC) ? -SIDEINC : (mario_velocity.xa - SIDEINC/(12*(inAir+1)));
+
+			}
+
+			if(keystates[SDL_SCANCODE_SPACE]){
+
+				if(!inAir){ //check if in air
+					mario_velocity.ya += 22; //jump velocity
+					inAir = 1;
+				}
+
+			}
+
+		}
 		
 		//printf("Vel:%lf Dir:%d  dum:%d\n", mario_velocity.xa, mDirection, dummy_rect.x); //prints debug info
 
@@ -415,10 +439,4 @@ int main(int argc, char **argv){
 	return 0;
 
 }
-
-
-
-
-
-
 

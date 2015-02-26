@@ -12,4 +12,8 @@ clean:
 	rm *.o mario
 
 mario: main.o
-	$(CC) $(LDFLAGS) -o mario.e main.o -I.
+	$(CC) $(LDFLAGS) -o mario main.o -I.
+
+mariou: main.o
+	$(CC) -o mario main.o -I. $(LDFLAGS)
+

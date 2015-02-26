@@ -260,12 +260,13 @@ SDL_Joystick *loadJoysticks(SDL_Joystick *joystick){
 	int i;
 
 	if(SDL_NumJoysticks() == 0){
-		printf("Found no joysticks\n");
-		exit(1);
+		printf("Found no joysticks!\n");
+		printf("Using keypad. Functionality will not be ideal.\n");
+		return NULL;
 		
 	} else {
 
-		printf("%d joysticks were found\n", SDL_NumJoysticks());
+		printf("%d joysticks were found!\n", SDL_NumJoysticks());
 
 	}
 

@@ -1,6 +1,7 @@
 #Compiled files
 *.o
-*.e
+mario
+marioleveleditor
 
 #Gedit Backups
 *.*~
