@@ -4,14 +4,14 @@ A simple mario game		||
 	Methods & Objects	||
 	-struct velocity	||
 	-updatePosition		||
-	-doGravity			||
+	-doGravity		||
 	-doDirection		||
-	-onGround			||
-	-snapToGrid			||
+	-onGround		||
+	-snapToGrid		||
 	-doScrolling		||
-						||
+				||
 Version: Dev 0.8		||
-//End//*///				||
+//End//*///			||
 //////////////////////////////////			
 
 
@@ -56,6 +56,8 @@ int main(int argc, char **argv){
 	int lDirection = 1;	//looking l/r
 	double prevVel;		//placeholder vel
 	int usingjoystick = 0;	//if using joystick
+	int runinterval = 0;
+	int movecounter = 0;
 
 	char throwaway;
 	char fname[100];
@@ -72,6 +74,8 @@ int main(int argc, char **argv){
 	SDL_Texture	*mario_l;		//
 	SDL_Texture	*mario_rj;		//
 	SDL_Texture	*mario_lj;		//
+	SDL_Texture	*mario_rr[4];		//
+	SDL_Texture	*mario_rl[4];		//
 	SDL_Texture	*blockpng[20];		//
 	SDL_Surface	*text_texture;		//
 	TTF_Font	*font = NULL;		//
@@ -129,14 +133,14 @@ int main(int argc, char **argv){
 
 	
 	//facing right
-	image = IMG_Load(PATH"/Assets/Images/Mario_dir1.png");
+	image = IMG_Load(PATH"/Assets/Images/mario_1.png");
 
 	mario_r = SDL_CreateTextureFromSurface(renderer, image);
 
 	SDL_FreeSurface(image);
 
 	//facing left
-	image = IMG_Load(PATH"/Assets/Images/Mario_dir-1.png");
+	image = IMG_Load(PATH"/Assets/Images/mario_-1.png");
 
 	mario_l = SDL_CreateTextureFromSurface(renderer, image);
 	
@@ -155,6 +159,63 @@ int main(int argc, char **argv){
 	mario_lj = SDL_CreateTextureFromSurface(renderer, image);
 
 	SDL_FreeSurface(image);
+
+	//running 0 right
+	image = IMG_Load(PATH"/Assets/Images/marior_0_1.png");
+
+	mario_rr[0] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 1 right
+	image = IMG_Load(PATH"/Assets/Images/marior_1_1.png");
+
+	mario_rr[1] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 2 right
+	image = IMG_Load(PATH"/Assets/Images/marior_2_1.png");
+
+	mario_rr[2] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 3 right
+	image = IMG_Load(PATH"/Assets/Images/mario_1_j.png");
+
+	mario_rr[3] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 0 left
+	image = IMG_Load(PATH"/Assets/Images/marior_0_-1.png");
+
+	mario_rl[0] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 1 left
+	image = IMG_Load(PATH"/Assets/Images/marior_1_-1.png");
+
+	mario_rl[1] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 2 left
+	image = IMG_Load(PATH"/Assets/Images/marior_2_-1.png");
+
+	mario_rl[2] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
+	//running 3 left
+	image = IMG_Load(PATH"/Assets/Images/mario_-1_j.png");
+
+	mario_rl[3] = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_FreeSurface(image);
+
 
 	//blocks
 
@@ -415,10 +476,43 @@ int main(int argc, char **argv){
 
 		} else {
 
-			if(lDirection > 0){
-				SDL_RenderCopy(renderer, mario_r, NULL, &mario_rect);
-			} else {
-				SDL_RenderCopy(renderer, mario_l, NULL, &mario_rect);
+			if(isMoving){
+
+				if(movecounter >= 15){
+					runinterval = 0;
+				} else if(movecounter >= 10){
+					runinterval = 3;
+				} else if(movecounter >= 5){
+					runinterval = 0;
+				} else if(movecounter >= 0){
+					runinterval = 2;
+				} else if(movecounter >= -5){
+					runinterval = 1;
+				} else if(movecounter >= -10){
+					runinterval = 3;
+				} else if(movecounter >= -15){
+					runinterval = 1;
+				} else if(movecounter >= -20){
+					runinterval = 2;
+				}
+	
+				movecounter = ((movecounter == 19) ? -20 : movecounter);
+				movecounter++;
+
+				if(lDirection > 0){
+					SDL_RenderCopy(renderer, mario_rr[runinterval], NULL, &mario_rect);
+				} else {
+					SDL_RenderCopy(renderer, mario_rl[runinterval], NULL, &mario_rect);
+				}	
+
+			} else {			
+
+				if(lDirection > 0){
+					SDL_RenderCopy(renderer, mario_r, NULL, &mario_rect);
+				} else {
+					SDL_RenderCopy(renderer, mario_l, NULL, &mario_rect);
+				}
+
 			}
 
 		}
